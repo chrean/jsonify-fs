@@ -12,11 +12,11 @@ const listFiles = ( parent, filelist = null ) => {
        
     if ( fs.statSync( parent + '/' + file ).isDirectory() ) {
       
-      filelist = listFiles( parent + '/' + file + '/', filelist);
+      filelist = listFiles( parent + '/' + file, filelist);
       
-    } else {
-      filelist[ parent ].push( file );
-    }
+    } 
+    
+    filelist[ parent ].push( file );
   
   });
 
