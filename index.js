@@ -50,4 +50,8 @@ program
     options.format && console.log( myList );
   });
 
+if ( ! process.argv.slice( 2 ).length ) {
+  program.help();
+}
+
 program.parse( process.argv );
