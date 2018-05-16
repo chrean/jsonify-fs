@@ -25,18 +25,31 @@ const listFiles = ( parent, filelist = null ) => {
   return filelist;
 }
 
+const saveFile = ( path, content ) => {
+  const fs = require( 'fs');
+
+  fs.writeFile( path, content, (err) => {
+    if (err) console.log( 'orrore' ); //throw err;
+    console.log('The file has been saved!');
+  });
+
+}
 
 program
   .command( 'ls')
   .arguments( '<directory>' )
   .option('-f, --format <JSON/XML>', 'Output format')
+  .option('-o, --outfile <filename>', 'Save output into a file')
   .action( ( directory, options ) => {
 
-    const myList = listFiles( directory );
+    const myList = JSON.stringify( listFiles( directory ), null, 2) ;
 
-    console.log( JSON.stringify( myList, null, 2 ) );
-    
+    // If a valid path is specified, save output on file
+    if ( options.outfile ) {
+      saveFile( options.outfile, myList );
     }
-  );
+    
+    //console.log( myList );
+  });
 
 program.parse( process.argv );
