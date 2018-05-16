@@ -32,7 +32,7 @@ program
 
     const myList = listFiles( directory );
 
-    console.log( myList );
+    console.log( JSON.stringify( myList, null, 2 ) );
     
     }
   );
