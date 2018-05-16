@@ -2,18 +2,20 @@
 
 var program = require('commander');
 
-const listFiles = ( parent, filelist ) => {
+const listFiles = ( parent, filelist = null ) => {
+
   const fs = require( 'fs' ), files = fs.readdirSync( parent );
 
-  filelist = filelist || [];
+  filelist = filelist || {};
+  filelist[ parent ] = filelist[ parent ] || [];
   files.forEach( file => {
        
     if ( fs.statSync( parent + '/' + file ).isDirectory() ) {
-
+      
       filelist = listFiles( parent + '/' + file + '/', filelist);
       
     } else {
-      filelist.push( file );
+      filelist[ parent ].push( file );
     }
   
   });
