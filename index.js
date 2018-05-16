@@ -45,11 +45,9 @@ program
     const myList = JSON.stringify( listFiles( directory ), null, 2) ;
 
     // If a valid path is specified, save output on file
-    if ( options.outfile ) {
-      saveFile( options.outfile, myList );
-    }
+    options.outfile && saveFile( options.outfile, myList );
     
-    //console.log( myList );
+    options.format && console.log( myList );
   });
 
 program.parse( process.argv );
