@@ -8,15 +8,17 @@ const listFiles = ( parent, filelist = null ) => {
 
   filelist = filelist || {};
   filelist[ parent ] = filelist[ parent ] || [];
+  let fileType = 'file';
   files.forEach( file => {
        
     if ( fs.statSync( parent + '/' + file ).isDirectory() ) {
       
       filelist = listFiles( parent + '/' + file, filelist);
-      
+      fileType = 'dir'; 
     } 
     
-    filelist[ parent ].push( file );
+    const fileObj = { [fileType]: file };
+    filelist[ parent ].push( fileObj );
   
   });
 
