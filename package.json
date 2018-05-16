@@ -1,0 +1,18 @@
+{
+  "name": "jsonifyfs",
+  "version": "1.0.0",
+  "description": "Render FS structure in JSON",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabriel Sambarino",
+  "license": "ISC",
+  "bin": {
+    "jsonifyfs": "./index.js"
+  },
+  "dependencies": {
+    "commander": "^2.15.1",
+    "save": "^2.3.2"
+  }
+}
