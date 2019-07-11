@@ -1,57 +1,56 @@
 #!/usr/bin/env node
 
-var program = require('commander');
+const program = require('commander');
 
-const listFiles = ( parent, filelist = null ) => {
+function listFiles( parent, filelist = null ) {
+	const fs = require( 'fs' );
+  	const files = fs.readdirSync( parent );
 
-  const fs = require( 'fs' ), files = fs.readdirSync( parent );
+  	filelist = filelist || {};
+  	filelist[ parent ] = filelist[ parent ] || [];
 
-  filelist = filelist || {};
-  filelist[ parent ] = filelist[ parent ] || [];
-  let fileType = 'file';
-  files.forEach( file => {
-       
-    if ( fs.statSync( parent + '/' + file ).isDirectory() ) {
-      
-      filelist = listFiles( parent + '/' + file, filelist);
-      fileType = 'dir'; 
-    } 
-    
-    const fileObj = { [fileType]: file };
-    filelist[ parent ].push( fileObj );
-  
-  });
+  	let fileType = 'file';
+  	files.forEach( file => {   
+		if ( fs.statSync( `${ parent }/${ file }` ).isDirectory() ) {
+			filelist = listFiles( `${ parent }/${ file }`, filelist);
+			fileType = 'dir'; 
+		} 
+		
+		const fileObj = { [ fileType ]: file };
+		filelist[ parent ].push( fileObj );
+	} );
 
   return filelist;
 }
 
-const saveFile = ( path, content ) => {
-  const fs = require( 'fs');
+function saveFile( path, content ) {
+  	const fs = require( 'fs' );
 
-  fs.writeFile( path, content, (err) => {
-    if (err) console.log( 'orrore' ); //throw err;
-    console.log('The file has been saved!');
-  });
-
+  	try {
+    	fs.writeFileSync( path, content );
+  	} catch ( err ) {
+    	return console.log( `Error writing file ${ path }: ${ err.message }` ); //throw err;
+  	}
+  	console.log('The file has been saved!');
 }
 
 program
-  .command( 'ls')
-  .arguments( '<directory>' )
-  .option('-f, --format <JSON/XML>', 'Output format')
-  .option('-o, --outfile <filename>', 'Save output into a file')
-  .action( ( directory, options ) => {
+  	.command( 'ls')
+  	.arguments( '<directory>' )
+  	.option('-f, --format <JSON/XML>', 'Output format')
+  	.option('-o, --outfile <filename>', 'Save output into a file')
+  	.action( ( directory, options ) => {
 
-    const myList = JSON.stringify( listFiles( directory ), null, 2) ;
+    	const myList = JSON.stringify( listFiles( directory ), null, 2) ;
 
-    // If a valid path is specified, save output on file
-    options.outfile && saveFile( options.outfile, myList );
+    	// If a valid path is specified, save output on file
+    	options.outfile && saveFile( options.outfile, myList );
     
-    options.format && console.log( myList );
-  });
+    	options.format && console.log( myList );
+  	} );
 
-if ( ! process.argv.slice( 2 ).length ) {
-  program.help();
-}
+	if ( ! process.argv.slice( 2 ).length ) {
+  		program.help();
+	}
 
 program.parse( process.argv );
