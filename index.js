@@ -4,17 +4,25 @@ const program = require('commander');
 
 async function listFiles( path, recursive = false ) {
 	const fs = require( 'fs' );
+	const files = [];
 
-  	const files = fs.readdirSync( path );
+	// This will only grab the contents of a directory, not the directory itself
+	try {
+		files.push( path );
+		files.push( fs.readdirSync( path ) );
+	} catch( err ) {
+		return console.log( err );
+	}
+	console.log( files );
 
 	// If recursive flag was passed, delve deep into directories
 	if ( recursive ) {
-		for ( file of files ) {
+		files.map( async file => {
 			console.log( file );
 			if( fs.statSync( `${ path }/${ file }` ).isDirectory() ) {
 				file.siblings = await listFiles( `${ path }/${ file }`, recursive );
 			}
-		}
+		} );
 	}
 	return files;
 }
@@ -25,9 +33,6 @@ program
   	.option( '-f, --format <JSON/XML>', 'Output format' )
 	.option( '-o, --outfile <filename>', 'Save output into a file' )
 	.action( async ( dir, options ) => {
-		//console.log( `Directory: ${ dir }` );
-		//console.log( options.recursive );
-
 		await listFiles( dir, options.recursive );
 	} );
 
