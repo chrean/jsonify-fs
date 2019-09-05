@@ -2,55 +2,33 @@
 
 const program = require('commander');
 
-function listFiles( parent, filelist = null ) {
+async function listFiles( path, recursive = false ) {
 	const fs = require( 'fs' );
-  	const files = fs.readdirSync( parent );
 
-  	filelist = filelist || {};
-  	filelist[ parent ] = filelist[ parent ] || [];
+  	const files = fs.readdirSync( path );
 
-  	let fileType = 'file';
-  	files.forEach( file => {   
-		if ( fs.statSync( `${ parent }/${ file }` ).isDirectory() ) {
-			filelist = listFiles( `${ parent }/${ file }`, filelist);
-			fileType = 'dir'; 
-		} 
-		
-		const fileObj = { [ fileType ]: file };
-		filelist[ parent ].push( fileObj );
-	} );
-
-  return filelist;
-}
-
-function saveFile( path, content ) {
-  	const fs = require( 'fs' );
-
-  	try {
-    	fs.writeFileSync( path, content );
-  	} catch ( err ) {
-    	return console.log( `Error writing file ${ path }: ${ err.message }` ); //throw err;
-  	}
-  	console.log('The file has been saved!');
+	// If recursive flag was passed, delve deep into directories
+	if ( recursive ) {
+		for ( file of files ) {
+			console.log( file );
+			if( fs.statSync( `${ path }/${ file }` ).isDirectory() ) {
+				file.siblings = await listFiles( `${ path }/${ file }`, recursive );
+			}
+		}
+	}
+	return files;
 }
 
 program
-  	.command( 'ls')
-  	.arguments( '<directory>' )
-  	.option('-f, --format <JSON/XML>', 'Output format')
-  	.option('-o, --outfile <filename>', 'Save output into a file')
-  	.action( ( directory, options ) => {
+	.arguments( '<dir>' )
+	.option( '-r, --recursive', 'Recursive' )
+  	.option( '-f, --format <JSON/XML>', 'Output format' )
+	.option( '-o, --outfile <filename>', 'Save output into a file' )
+	.action( async ( dir, options ) => {
+		//console.log( `Directory: ${ dir }` );
+		//console.log( options.recursive );
 
-    	const myList = JSON.stringify( listFiles( directory ), null, 2) ;
-
-    	// If a valid path is specified, save output on file
-    	options.outfile && saveFile( options.outfile, myList );
-    
-    	options.format && console.log( myList );
-  	} );
-
-	if ( ! process.argv.slice( 2 ).length ) {
-  		program.help();
-	}
+		await listFiles( dir, options.recursive );
+	} );
 
 program.parse( process.argv );
