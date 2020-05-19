@@ -4,7 +4,8 @@
   "description": "Render FS structure in JSON",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint -f json . | eslines"
   },
   "author": "Gabriel Sambarino",
   "license": "ISC",
@@ -13,6 +14,7 @@
   },
   "dependencies": {
     "commander": "^2.15.1",
-    "save": "^2.3.2"
+    "save": "^2.3.2",
+    "eslint": "5.16.0"
   }
 }
