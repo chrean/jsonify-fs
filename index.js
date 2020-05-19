@@ -5,15 +5,23 @@ const program = require('commander');
 async function listFiles( path, recursive = false ) {
 	const fs = require( 'fs' );
 	const files = [];
+	let path = "";
+	
+	const entity = {};
+
+	// TODO: build each entry as an object, with type either "Directory", "File", "SymLink"
+	// and a key named Contents with its contents. Recursive structure.
 
 	// This will only grab the contents of a directory, not the directory itself
 	try {
-		files.push( path );
 		files.push( fs.readdirSync( path ) );
 	} catch( err ) {
 		return console.log( err );
 	}
-	console.log( files );
+
+	files.map( async file => {
+		entity.path = path;
+	} );
 
 	// If recursive flag was passed, delve deep into directories
 	if ( recursive ) {
