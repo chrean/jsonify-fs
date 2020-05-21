@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-const program = require('commander');
+const { program } = require( 'commander' );
 
 async function listFiles( path, recursive = false ) {
 	const fs = require( 'fs' );
 	const files = [];
-	let path = "";
-	
+
 	const entity = {};
 
 	// TODO: build each entry as an object, with type either "Directory", "File", "SymLink"
