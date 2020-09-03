@@ -2,20 +2,25 @@
   "name": "jsonifyfs",
   "version": "1.0.0",
   "description": "Render FS structure in JSON",
-  "main": "index.js",
+  "main": "src/bin/jsonifyfs.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint -f json . | eslines"
+    "lint": "eslint -f json . | eslines",
+    "clean": "rm -rf build/*",
+    "build": "npm run clean && ./helpers/build.sh"
   },
   "author": "Gabriel Sambarino",
   "license": "ISC",
   "bin": {
-    "jsonifyfs": "./index.js"
+    "jsonifyfs": "src/bin/jsonifyfs.js"
   },
   "dependencies": {
     "commander": "5.1.0",
+    "eslines": "Automattic/eslines#upgrade/eslint-7.x",
     "eslint": "7.0.0",
-    "save": "^2.3.2",
-    "eslines": "Automattic/eslines#upgrade/eslint-7.x"
+    "save": "^2.3.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
   }
 }
