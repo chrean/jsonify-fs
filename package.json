@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "commander": "5.1.0",
+    "eslint": "7.0.0",
     "save": "^2.3.2",
-    "eslint": "5.16.0",
-    "eslines": "1.1.0"
+    "eslines": "Automattic/eslines#upgrade/eslint-7.x"
   }
 }
