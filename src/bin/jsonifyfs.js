@@ -35,7 +35,8 @@ async function listFiles( path, recursive = false ) {
 }
 
 program
-	.arguments( '<dir>' )
+	.arguments( '<di' +
+		'r>' )
 	.option( '-r, --recursive', 'Recursive' )
   	.option( '-f, --format <JSON/XML>', 'Output format' )
 	.option( '-o, --outfile <filename>', 'Save output into a file' )
